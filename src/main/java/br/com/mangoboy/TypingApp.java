@@ -28,6 +28,7 @@ public class TypingApp {
         for (char c : keys.toCharArray()) {
             if (c != '\n') {
                 JButton b = new JButton("" + c);
+                b.setEnabled(false);
                 p.add(b);
             }
         }
