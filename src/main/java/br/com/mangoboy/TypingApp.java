@@ -32,13 +32,15 @@ public class TypingApp {
                 ASDFGHJKLÇ~]
                 \\ZXCVBNM,.;/
                 """;
+
         // https://docs.oracle.com/javase/8/docs/api/java/awt/GridBagLayout.html
         GridBagLayout gridbag = new GridBagLayout();
         GridBagConstraints gc = new GridBagConstraints();
 
-        Map<String, JButton> keymap = new HashMap<>();
         JPanel p = new JPanel();
         p.setLayout(gridbag);
+
+        Map<String, JButton> keymap = new HashMap<>();
 
         for (char c : keys.toCharArray()) {
             if (c != '\n') {
@@ -47,52 +49,43 @@ public class TypingApp {
                     gc.gridwidth = GridBagConstraints.REMAINDER;
                     gridbag.setConstraints(b, gc);
                 }
-                b.setEnabled(false);
                 p.add(b);
                 keymap.put("" + c, b);
             }
         }
-        // p.setOpaque(true);
+        p.setOpaque(true);
         frame.setFocusable(true);
 
         frame.addKeyListener(new KeyListener() {
 
             @Override
             public void keyTyped(KeyEvent e) {
-                logger.info(e.toString());
-                JButton b = keymap.get("" + e.getKeyChar());
-                if (b != null) {
-                    logger.info(b.getText());
-                    // https://docs.oracle.com/javase/8/docs/api/javax/swing/SwingWorker.html
-                    logger.info("Pressing a button");
-
-                    class MeaningOfLifeFinder extends SwingWorker<String, Object> {
-                        @Override
-                        public String doInBackground() {
-                            // return findTheMeaningOfLife();
-                            return "";
-                        }
-
-                        @Override
-                        protected void done() {
-                            try {
-                                // label.setText(get());
-                                b.doClick(200);
-                            } catch (Exception ignore) {
-                            }
-                        }
-                    }
-                    (new MeaningOfLifeFinder()).execute();
-
-                }
             }
 
             @Override
             public void keyPressed(KeyEvent e) {
+                logger.info(e.toString());
+                JButton b = keymap.get("" + e.getKeyChar());
+                if (b != null) {
+                    logger.info(b.getText());
+                    logger.info("Pressing a button");
+                    var model = b.getModel();
+                    model.setArmed(true);
+                    model.setPressed(true);
+                }
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
+                logger.info(e.toString());
+                JButton b = keymap.get("" + e.getKeyChar());
+                if (b != null) {
+                    logger.info(b.getText());
+                    logger.info("Releasing a button");
+                    var model = b.getModel();
+                    model.setPressed(false);
+                    model.setArmed(false);
+                }
             }
 
         }
