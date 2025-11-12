@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingWorker;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
