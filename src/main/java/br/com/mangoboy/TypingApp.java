@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.*;
 
 /**
  * 
@@ -28,10 +29,20 @@ public class TypingApp {
                 ASDFGHJKLÇ~]
                 \\ZXCVBNM,.;/
                 """;
+        // https://docs.oracle.com/javase/8/docs/api/java/awt/GridBagLayout.html
+        GridBagLayout gridbag = new GridBagLayout();
+        GridBagConstraints gc = new GridBagConstraints();
+
         JPanel p = new JPanel();
+        p.setLayout(gridbag);
+
         for (char c : keys.toCharArray()) {
             if (c != '\n') {
                 JButton b = new JButton("" + c);
+                if (c == ']' || c == '[') {
+                    gc.gridwidth = GridBagConstraints.REMAINDER;
+                    gridbag.setConstraints(b, gc);
+                }
                 b.setEnabled(false);
                 p.add(b);
             }
@@ -42,7 +53,7 @@ public class TypingApp {
 
             @Override
             public void keyTyped(KeyEvent e) {
-                System.out.println(e);
+                logger.info(e.toString());
             }
 
             @Override
