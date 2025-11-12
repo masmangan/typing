@@ -1,10 +1,13 @@
 package br.com.mangoboy;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingWorker;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -33,6 +36,7 @@ public class TypingApp {
         GridBagLayout gridbag = new GridBagLayout();
         GridBagConstraints gc = new GridBagConstraints();
 
+        Map<String, JButton> keymap = new HashMap<>();
         JPanel p = new JPanel();
         p.setLayout(gridbag);
 
@@ -45,15 +49,42 @@ public class TypingApp {
                 }
                 b.setEnabled(false);
                 p.add(b);
+                keymap.put("" + c, b);
             }
         }
-        p.setOpaque(true);
+        // p.setOpaque(true);
+        frame.setFocusable(true);
 
         frame.addKeyListener(new KeyListener() {
 
             @Override
             public void keyTyped(KeyEvent e) {
                 logger.info(e.toString());
+                JButton b = keymap.get("" + e.getKeyChar());
+                if (b != null) {
+                    logger.info(b.getText());
+                    // https://docs.oracle.com/javase/8/docs/api/javax/swing/SwingWorker.html
+                    logger.info("Pressing a button");
+
+                    class MeaningOfLifeFinder extends SwingWorker<String, Object> {
+                        @Override
+                        public String doInBackground() {
+                            // return findTheMeaningOfLife();
+                            return "";
+                        }
+
+                        @Override
+                        protected void done() {
+                            try {
+                                // label.setText(get());
+                                b.doClick(200);
+                            } catch (Exception ignore) {
+                            }
+                        }
+                    }
+                    (new MeaningOfLifeFinder()).execute();
+
+                }
             }
 
             @Override
@@ -63,10 +94,9 @@ public class TypingApp {
             @Override
             public void keyReleased(KeyEvent e) {
             }
-            
+
         }
-        
-        
+
         );
         frame.add(p);
         frame.pack();
